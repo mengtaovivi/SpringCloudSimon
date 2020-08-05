@@ -1,0 +1,39 @@
+server:
+  port: 10241
+  servlet:
+    session:
+      timeout: PT1M
+    context-path: /websocket
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  basedir:  SpringCloudSimon/websocket
+
+spring:
+  application:
+    name: websocket
+  datasource:
+    url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false
+    username: root
+    password: password01
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    serviceUrl:
+      defaultZone: http://user:123456@localhost:10240/eureka/      #服务注册中信地址，含有BASIC认证的用户名和密码
+  instance:
+    prefer-ip-address: true         #将IP注册到服务注册中心
+
+
+#放开所有节点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

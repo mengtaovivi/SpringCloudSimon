@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="framework" />
+        <module name="eureka-server" />
+        <module name="base" />
+        <module name="websocket" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="neo4j" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="SpringCloudSimon" options="-parameters" />
+      <module name="base" options="-parameters" />
+      <module name="eureka-server" options="-parameters" />
+      <module name="framework" options="-parameters" />
+      <module name="neo4j" options="-parameters" />
+      <module name="websocket" options="-parameters" />
+    </option>
+  </component>
+</project>

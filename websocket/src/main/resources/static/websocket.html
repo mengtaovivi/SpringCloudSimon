@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WebSocket demo</title>
+<style type="text/css">
+* {
+	box-sizing: border-box;
+}
+
+ol, ul, li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#message {
+	font-size: 16px;
+	width: 600px;
+	height: 300px;
+	border: 1px solid #8888ff;
+	overflow: auto;
+	height: 500px;
+}
+
+label.sid {
+	display: inline-block;
+	width: 100px;
+	margin-left: 250px;
+	text-align: right;
+}
+
+#sid, #text {
+	margin: 1px;
+	border: 1px solid #8888ff;
+}
+
+#sid {
+	width: 120px;
+}
+
+#text {
+	width: 478px;
+}
+
+#connect, #send {
+	width: 120px;
+}
+</style>
+</head>
+<body>
+	<ul>
+		<li><textarea id="message"></textarea></li>
+		<li><label class="sid">SID: </label> <input id="sid" type="text" value="1"> <input id="connect" type="button" value="连接" /></li>
+		<li><input id="text" type="text" value="" /><input id="send" type="button" value="发送" /></li>
+	</ul>
+</body>
+<script>
+	var SocketEngine = function(url) {
+		this.url = url;
+		this.socket = null;
+	}
+	SocketEngine.prototype = {
+		//连接建立时触发
+		onopen : function(event) {
+			console.log("websocket onopen");
+		},
+		//客户端接收服务端数据时触发
+		onmessage : function(event) {
+			console.log("websocket onmessage");
+		},
+		//通信发生错误时触发
+		onerror : function(event) {
+			console.log("websocket onerror");
+		},
+		//连接关闭时触发
+		onclose : function(event) {
+			console.log("websocket onclose");
+		},
+		//初始化连接
+		connect : function(url) {
+			console.log(url)
+			this.socket != null && this.socket.close();
+			this.socket = new WebSocket((this.url = url) && this.url);
+			this.socket.onopen = this.onopen;
+			this.socket.onmessage = this.onmessage;
+			this.socket.onerror = this.onerror;
+			this.socket.onclose = this.onclose;
+		},
+		//发送消息
+		send : function(message) {
+			this.socket && this.socket.send(message);
+		}
+	}
+
+	var EL = {
+		message : document.querySelector('#message'),
+		sid : document.querySelector('#sid'),
+		connect : document.querySelector('#connect'),
+		text : document.querySelector('#text'),
+		send : document.querySelector('#send')
+	}
+
+	EL.message.value = EL.text.value = '';
+
+	var fnWriteMessage = function(message) {
+		EL.message.value += (message || '') + '\n';
+		EL.message.scrollTop = EL.message.scrollHeight;
+	};
+
+	var oSocketEngine = new SocketEngine();
+
+	oSocketEngine.onopen = function(event) {
+		fnWriteMessage('open socket!');
+	};
+	oSocketEngine.onmessage = function(event) {
+		fnWriteMessage('message=>' + event.data);
+	};
+	oSocketEngine.onclose = function(event) {
+		fnWriteMessage('close socket!');
+	};
+
+	EL.connect.addEventListener('click', function() {
+		oSocketEngine.connect('ws://127.0.0.1:10241/websocket/ws/online-message/' + EL.sid.value);
+	}, false);
+
+	EL.send.addEventListener('click', function() {
+		oSocketEngine.send(EL.text.value);
+	}, false);
+</script>
+</html>
